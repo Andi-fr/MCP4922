@@ -18,9 +18,17 @@
 
 MCP4922::MCP4922(PinName mosi, PinName sclk, PinName cs, int hz) : m_SPI(mosi, NC, sclk), m_CS(cs, 1)
 {
+    //Initialize the member variables
+    m_DacValueA = 0;
+    m_DacValueB = 0;
+
     //Set the SPI format and bus frequency
     m_SPI.format(16, 0);
     m_SPI.frequency(hz);
+
+    //Perform an initial write to both DACs so the variables are in sync
+    writeDac(m_DacValueA | (DAC_A << 15));
+    writeDac(m_DacValueB | (DAC_B << 15));
 }
 
 MCP4922::ReferenceMode MCP4922::referenceMode(DAC dac)
